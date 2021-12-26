@@ -200,7 +200,12 @@ def pegasos_single_step_update(
     real valued number with the value of theta_0 after the current updated has
     completed.
     """
-    # Your code here
+    if label * (current_theta @ feature_vector + current_theta_0) <= 1:
+        current_theta = (1 - eta * L) * current_theta + eta * label * feature_vector
+        current_theta_0 += eta * label
+    else:
+        current_theta = (1 - eta * L) * current_theta
+    return (current_theta, current_theta_0)
     raise NotImplementedError
 
 
@@ -233,7 +238,19 @@ def pegasos(feature_matrix, labels, T, L):
     number with the value of the theta_0, the offset classification
     parameter, found after T iterations through the feature matrix.
     """
-    # Your code here
+    current_theta, current_theta_0, counter = np.zeros(len(feature_matrix[0])), 0, 0
+    for t in range(T):
+        for i in get_order(feature_matrix.shape[0]):
+            counter += 1
+            eta = 1 / np.sqrt(counter)
+            current_theta, current_theta_0 = pegasos_single_step_update(
+                                                            feature_matrix[i],
+                                                            labels[i],
+                                                            L,
+                                                            eta,
+                                                            current_theta,
+                                                            current_theta_0)
+    return (current_theta, current_theta_0)
     raise NotImplementedError
 
 # Part II
@@ -256,7 +273,13 @@ def classify(feature_matrix, theta, theta_0):
     given theta and theta_0. If a prediction is GREATER THAN zero, it should
     be considered a positive classification.
     """
-    # Your code here
+    labels = feature_matrix @ theta + theta_0
+    for i in range(labels.shape[0]):
+        if labels[i] > 0:
+            labels[i] = 1
+        else:
+            labels[i] = -1
+    return labels
     raise NotImplementedError
 
 
@@ -292,7 +315,10 @@ def classifier_accuracy(
     trained classifier on the training data and the second element is the
     accuracy of the trained classifier on the validation data.
     """
-    # Your code here
+    theta, theta_0 = classifier(train_feature_matrix, train_labels, **kwargs)
+    train_feature_pred = classify(train_feature_matrix, theta, theta_0)
+    val_feature_pred = classify(val_feature_matrix, theta, theta_0)
+    return (accuracy(train_feature_pred, train_labels), accuracy(val_feature_pred, val_labels))
     raise NotImplementedError
 
 
@@ -316,7 +342,6 @@ def bag_of_words(texts):
 
     Feel free to change this code as guided by Problem 9
     """
-    # Your code here
     dictionary = {} # maps word to unique index
     for text in texts:
         word_list = extract_words(text)
@@ -336,8 +361,6 @@ def extract_bow_feature_vectors(reviews, dictionary):
 
     Feel free to change this code as guided by Problem 9
     """
-    # Your code here
-
     num_reviews = len(reviews)
     feature_matrix = np.zeros([num_reviews, len(dictionary)])
 
