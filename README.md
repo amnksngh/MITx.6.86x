@@ -1,6 +1,6 @@
 # MITx.6.86x
 
-This repository contains all the course material taought in the MIT course MITx.6.86x. All the projects will also be available but with slite modifications so that anyone taking up this course does not take the easy way out without doing the actaul work. I will also include the practice exercises for different packages that will be useful during this course.
+This repository contains all the course material taught in the MIT course MITx.6.86x. All the projects will also be available but with slite modifications so that anyone taking up this course does not take the easy way out without doing the actaul work. I will also include the practice exercises for different packages that will be useful during this course.
 
 ### [Machine Learning with Python-From Linear Models to Deep Learning](https://learning.edx.org/course/course-v1:MITx+6.86x+3T2021/home)
 
